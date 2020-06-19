@@ -1,4 +1,4 @@
-package com.gusto.os.api;
+package com.gusto.os;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

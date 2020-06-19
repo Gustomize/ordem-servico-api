@@ -1,4 +1,4 @@
-package com.gusto.os.api.domain.exception;
+package com.gusto.os.domain.exception;
 
 public class NegocioException extends RuntimeException {
 

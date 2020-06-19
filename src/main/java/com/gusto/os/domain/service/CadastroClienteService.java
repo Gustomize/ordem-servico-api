@@ -1,11 +1,11 @@
-package com.gusto.os.api.domain.service;
+package com.gusto.os.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gusto.os.api.domain.exception.NegocioException;
-import com.gusto.os.api.domain.model.Cliente;
-import com.gusto.os.api.domain.repository.ClienteRepository;
+import com.gusto.os.domain.exception.NegocioException;
+import com.gusto.os.domain.model.Cliente;
+import com.gusto.os.domain.repository.ClienteRepository;
 
 @Service
 public class CadastroClienteService {

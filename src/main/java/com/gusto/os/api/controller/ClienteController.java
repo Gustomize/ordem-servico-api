@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gusto.os.api.domain.model.Cliente;
-import com.gusto.os.api.domain.repository.ClienteRepository;
-import com.gusto.os.api.domain.service.CadastroClienteService;
+import com.gusto.os.domain.model.Cliente;
+import com.gusto.os.domain.repository.ClienteRepository;
+import com.gusto.os.domain.service.CadastroClienteService;
 
 @RestController
 @RequestMapping("/clientes")
