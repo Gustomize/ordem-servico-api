@@ -9,9 +9,12 @@ import com.gusto.os.domain.repository.ClienteRepository;
 
 @Service
 public class CadastroClienteService {
+	private final ClienteRepository clienteRepository;
 
 	@Autowired
-	private ClienteRepository clienteRepository;
+	public CadastroClienteService(ClienteRepository clienteRepository) {
+		this.clienteRepository = clienteRepository;
+	}
 
 	public Cliente salvar(Cliente cliente) {
 		Cliente clienteExistente = clienteRepository.findByEmail(cliente.getEmail());
@@ -26,5 +29,4 @@ public class CadastroClienteService {
 	public void excluir(long id) {
 		clienteRepository.deleteById(id);
 	}
-
 }

@@ -9,4 +9,4 @@ CREATE TABLE comentario
 
 ALTER TABLE comentario
   ADD CONSTRAINT fk_comentario_ordem_servico FOREIGN KEY (ordem_servico_id)
-  REFERENCES ordem_servico (id); 
+  REFERENCES ordem_servico (id);

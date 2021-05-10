@@ -28,59 +28,58 @@ import com.gusto.os.domain.service.GestaoOrdemServicoService;
 @RestController
 @RequestMapping("/ordens-servico")
 public class OrdemServicoController {
+    private final GestaoOrdemServicoService service;
+    private final OrdemServicoRepository repository;
+    private final ModelMapper modelMapper;
 
-	@Autowired
-	private GestaoOrdemServicoService service;
+    @Autowired
+    public OrdemServicoController(GestaoOrdemServicoService service,
+                                  OrdemServicoRepository repository,
+                                  ModelMapper modelMapper) {
+        this.service = service;
+        this.repository = repository;
+        this.modelMapper = modelMapper;
+    }
 
-	@Autowired
-	private OrdemServicoRepository repository;
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrdemServicoModel criar(@Valid @RequestBody OrdemServicoInput ordemServicoInput) {
+        OrdemServico ordemServico = toEntity(ordemServicoInput);
+        return toModel(service.criar(ordemServico));
+    }
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @GetMapping
+    public List<OrdemServicoModel> listarOrdensServico() {
+        return toCollectionModel(repository.findAll());
+    }
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public OrdemServicoModel criar(@Valid @RequestBody OrdemServicoInput ordemServicoInput) {
-		OrdemServico ordemServico = toEntity(ordemServicoInput);
-		
-		return toModel(service.criar(ordemServico));
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<OrdemServicoModel> buscar(@PathVariable long id) {
+        Optional<OrdemServico> ordemServico = repository.findById(id);
+        if (ordemServico.isPresent()) {
+            OrdemServicoModel model = toModel(ordemServico.get());
+            return ResponseEntity.ok(model);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
-	@GetMapping
-	public List<OrdemServicoModel> listarOrdensServico() {
-		return toCollectionModel(repository.findAll());
-	}
+    @PutMapping("/{id}/finalizacao")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finalizar(@PathVariable long id) {
+        service.finalizarOrdemServico(id);
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<OrdemServicoModel> buscar(@PathVariable long id) {
-		Optional<OrdemServico> ordemServico = repository.findById(id);
+    private OrdemServicoModel toModel(OrdemServico ordemServico) {
+        return modelMapper.map(ordemServico, OrdemServicoModel.class);
+    }
 
-		if (ordemServico.isPresent()) {
-			OrdemServicoModel model = toModel(ordemServico.get());
-			return ResponseEntity.ok(model);
-		}
+    private List<OrdemServicoModel> toCollectionModel(List<OrdemServico> ordensServico) {
+        return ordensServico.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
+    }
 
-		return ResponseEntity.notFound().build();
-	}
-	
-	@PutMapping("/{id}/finalizacao")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void finalizar(@PathVariable long id) {
-		service.finalizarOrdemServico(id);
-	}
-	
-	private OrdemServicoModel toModel(OrdemServico ordemServico) {
-		return modelMapper.map(ordemServico, OrdemServicoModel.class);
-	}
-	
-	private List<OrdemServicoModel> toCollectionModel(List<OrdemServico> ordensServico) {
-		return ordensServico.stream()
-				.map(ordemServico -> toModel(ordemServico))
-				.collect(Collectors.toList());
-	}
-	
-	private OrdemServico toEntity(OrdemServicoInput ordemServicoInput) {
-		return modelMapper.map(ordemServicoInput, OrdemServico.class);
-	}
-	
+    private OrdemServico toEntity(OrdemServicoInput ordemServicoInput) {
+        return modelMapper.map(ordemServicoInput, OrdemServico.class);
+    }
 }

@@ -7,5 +7,4 @@ import com.gusto.os.domain.model.OrdemServico;
 
 @Repository
 public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long>{
-
 }

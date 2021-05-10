@@ -25,7 +25,6 @@ import com.gusto.os.domain.exception.NegocioException;
 
 @Entity
 public class OrdemServico {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -75,16 +74,8 @@ public class OrdemServico {
 		return descricao;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
 	public BigDecimal getPreco() {
 		return preco;
-	}
-
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
 	}
 
 	public StatusOrdemServico getStatus() {
@@ -95,16 +86,8 @@ public class OrdemServico {
 		this.status = status;
 	}
 
-	public OffsetDateTime getDataAbertura() {
-		return dataAbertura;
-	}
-
 	public void setDataAbertura(OffsetDateTime dataAbertura) {
 		this.dataAbertura = dataAbertura;
-	}
-
-	public OffsetDateTime getDataFinalizacao() {
-		return dataFinalizacao;
 	}
 
 	public void setDataFinalizacao(OffsetDateTime dataFinalizacao) {
@@ -115,14 +98,10 @@ public class OrdemServico {
 		return comentarios;
 	}
 
-	public void setComentarios(List<Comentario> comentarios) {
-		this.comentarios = comentarios;
-	}
-
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final var prime = 31;
+		var result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
@@ -136,9 +115,7 @@ public class OrdemServico {
 		if (getClass() != obj.getClass())
 			return false;
 		OrdemServico other = (OrdemServico) obj;
-		if (id != other.id)
-			return false;
-		return true;
+		return id == other.id;
 	}
 
 	public boolean podeSerFinalizada() {

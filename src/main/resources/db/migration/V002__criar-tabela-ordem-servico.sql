@@ -12,4 +12,4 @@ CREATE TABLE ordem_servico
 
 ALTER TABLE ordem_servico
   ADD CONSTRAINT fk_ordem_servico_cliente FOREIGN KEY (cliente_id) REFERENCES
-  cliente (id); 
+  cliente (id);

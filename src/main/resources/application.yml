@@ -1,0 +1,7 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/ordemservico?createDatabaseIfNotExist=true&serverTimeZone=UTC
+        username: gustavo
+        password: gsilva11
+    jpa:
+        show-sql: true

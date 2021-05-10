@@ -7,5 +7,4 @@ import com.gusto.os.domain.model.Comentario;
 
 @Repository
 public interface ComentarioRepository extends JpaRepository<Comentario, Long>{
-
 }

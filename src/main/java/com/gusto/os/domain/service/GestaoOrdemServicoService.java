@@ -17,49 +17,49 @@ import com.gusto.os.domain.repository.OrdemServicoRepository;
 
 @Service
 public class GestaoOrdemServicoService {
+    private final OrdemServicoRepository ordemServicoRepository;
+    private final ClienteRepository clienteRepository;
+    private final ComentarioRepository comentarioRepository;
 
-	@Autowired
-	private OrdemServicoRepository ordemServicoRepository;
+    @Autowired
+    public GestaoOrdemServicoService(OrdemServicoRepository ordemServicoRepository,
+                                     ClienteRepository clienteRepository,
+                                     ComentarioRepository comentarioRepository) {
+        this.ordemServicoRepository = ordemServicoRepository;
+        this.clienteRepository = clienteRepository;
+        this.comentarioRepository = comentarioRepository;
+    }
 
-	@Autowired
-	private ClienteRepository clienteRepository;
+    public OrdemServico criar(OrdemServico ordemServico) {
+        Cliente cliente = clienteRepository
+                .findById(ordemServico.getCliente().getId())
+                .orElseThrow(() -> new NegocioException("Cliente não encontrado"));
 
-	@Autowired
-	private ComentarioRepository comentarioRepository;
+        ordemServico.setCliente(cliente);
+        ordemServico.setStatus(StatusOrdemServico.ABERTA);
+        ordemServico.setDataAbertura(OffsetDateTime.now());
 
-	public OrdemServico criar(OrdemServico ordemServico) {
-		Cliente cliente = clienteRepository.findById(ordemServico.getCliente().getId())
-				.orElseThrow(() -> new NegocioException("Cliente não encontrado"));
+        return ordemServicoRepository.save(ordemServico);
+    }
 
-		ordemServico.setCliente(cliente);
-		ordemServico.setStatus(StatusOrdemServico.ABERTA);
-		ordemServico.setDataAbertura(OffsetDateTime.now());
+    public void finalizarOrdemServico(long ordemServicoId) {
+        OrdemServico ordemServico = buscar(ordemServicoId);
+        ordemServico.finalizar();
+        ordemServicoRepository.save(ordemServico);
+    }
 
-		return ordemServicoRepository.save(ordemServico);
-	}
+    public Comentario adicionarComentario(long ordemServicoId, String descricao) {
+        OrdemServico ordemServico = buscar(ordemServicoId);
+        Comentario comentario = new Comentario();
+        comentario.setDataEnvio(OffsetDateTime.now());
+        comentario.setDescricao(descricao);
+        comentario.setOrdemServico(ordemServico);
+        return comentarioRepository.save(comentario);
+    }
 
-	public void finalizarOrdemServico(long ordemServicoId) {
-		OrdemServico ordemServico = buscar(ordemServicoId);
-		
-		ordemServico.finalizar();
-		
-		ordemServicoRepository.save(ordemServico);
-	}
-
-	public Comentario adicionarComentario(long ordemServicoId, String descricao) {
-		OrdemServico ordemServico = buscar(ordemServicoId);
-
-		Comentario comentario = new Comentario();
-		comentario.setDataEnvio(OffsetDateTime.now());
-		comentario.setDescricao(descricao);
-		comentario.setOrdemServico(ordemServico);
-
-		return comentarioRepository.save(comentario);
-	}
-
-	private OrdemServico buscar(long ordemServicoId) {
-		return ordemServicoRepository.findById(ordemServicoId)
-				.orElseThrow(() -> new EntidadeNaoEncontradaException("Ordem de serviço não encontrada"));
-	}
-
+    private OrdemServico buscar(long ordemServicoId) {
+        return ordemServicoRepository
+                .findById(ordemServicoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Ordem de serviço não encontrada"));
+    }
 }
